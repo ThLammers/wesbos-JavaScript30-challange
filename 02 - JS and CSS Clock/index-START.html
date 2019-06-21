@@ -9,21 +9,42 @@
 
     <div class="clock">
       <div class="clock-face">
-        <div class="hand hour-hand"></div>
-        <div class="hand min-hand"></div>
-        <div class="hand second-hand"></div>
+        <div class="hand hour-hand" id="hours"></div>
+        <div class="hand min-hand" id="minutes"></div>
+        <div class="hand second-hand" id="seconds"></div>
       </div>
     </div>
 
 
   <style>
     html {
-      background: #018DED url(http://unsplash.it/1500/1000?image=881&blur=5);
+    background: linear-gradient(76deg, #3e5151, #decba4);
+    background-size: 400% 400%;
+
+    -webkit-animation: AnimationName 21s ease infinite;
+    -moz-animation: AnimationName 21s ease infinite;
+    animation: AnimationName 21s ease infinite;
+
+    @-webkit-keyframes AnimationName {
+        0%{background-position:0% 45%}
+        50%{background-position:100% 56%}
+        100%{background-position:0% 45%}
+    }
+    @-moz-keyframes AnimationName {
+        0%{background-position:0% 45%}
+        50%{background-position:100% 56%}
+        100%{background-position:0% 45%}
+    }
+    @keyframes AnimationName {
+        0%{background-position:0% 45%}
+        50%{background-position:100% 56%}
+        100%{background-position:0% 45%}
+      }
       background-size: cover;
       font-family: 'helvetica neue';
       text-align: center;
       font-size: 10px;
-    }
+      }
 
     body {
       margin: 0;
@@ -35,32 +56,42 @@
     }
 
     .clock {
-      width: 35rem;
-      height: 35rem;
-      border: 15px solid white;
+      width: 400px;
+      height: 400px;
+      border: 25px solid #DECBA4;
       border-radius: 50%;
       margin: 50px auto;
       position: relative;
-      padding: 2rem;
-      box-shadow:
-        0 0 0 4px rgba(0,0,0,0.1),
-        inset 0 0 0 3px #EFEFEF,
-        inset 0 0 10px black,
-        0 0 10px rgba(0,0,0,0.2);
+      padding: 3rem;
+      box-shadow: inset 6px 6px 0px -5px rgba(89,89,89,1);
+      opacity: .9;
+
+    }
+
+    .clock:after {
+      position: absolute;
+      content: ' ';
+      background: #0D0630;
+      width: 25px;
+      height: 25px;
+      top: 44.5%;
+      left: 44.5%;
+      transform: translateX(50%) translateY(50%);
+      border-radius: 50%;
+
     }
 
     .clock-face {
       position: relative;
       width: 100%;
       height: 100%;
-      transform: translateY(-3p x); /* account for the height of the clock hands */
+      transform: translateY(-3p x);  /*account for the height of the clock hands */
     }
 
     .hand {
       width: 50%;
-      height: 3px;
       border-radius:12px;
-      background: black;
+      background: #0D0630;
       position: absolute;
       top: 50%;
       transform-origin:100%;
@@ -69,33 +100,68 @@
       transition-timing-function: cubic-bezier(0, 1.99, 0.37, 1.82);
     }
 
+    #seconds{
+      background:#EB5E55;
+      height: 45%;
+      left: 49.5%;
+      position: absolute;
+      top: 14%;
+      transform-origin: 50% 80%;
+      width: 1%;
+      z-index: 8;
+
+    }
+
+    #minutes {
+      background:#0D0630;
+      height: 20%;
+      left: 48.75%;
+      position: absolute;
+      top: 30%;
+      transform-origin: 50% 100%;
+      width: 2.5%;
+      }
+
+    #hours {
+      background:#0D0630;
+      height: 40%;
+      left: 49%;
+      position: absolute;
+      top: 10%;
+      transform-origin: 50% 100%;
+      width: 2%;
+
+     }
+
+
+
   </style>
 
   <script>
+  const secondHand = document.querySelector('.second-hand');
+  const minuteHand = document.querySelector('.min-hand');
+  const hourHand   = document.querySelector('.hour-hand');
+  // -----------> Out the method so that the date stays fixed and the incrementation can be infinite
+  const firstLoadTime = new Date()
+  var seconds = firstLoadTime.getSeconds();
+  var minutes = firstLoadTime.getMinutes();
+  var hours   = firstLoadTime.getHours();
+  // <---------------------------------
 
-const secondHand = document.querySelector('.second-hand')
-const minHand = document.querySelector('.min-hand')
-const hourHand = document.querySelector('.hour-hand')
-
-  function setDate() {
-    const now = new Date ();
-    const seconds = now.getSeconds();
-    const secondsDegrees = ((seconds / 60) * 360) + 90;
-    secondHand.style.transform = `rotate(${secondsDegrees}deg`;
-
-
-    const minutes = now.getMinutes();
-    const minutesDegrees = ((minutes / 60) * 360) + 90;
-    minHand.style.transform = `rotate(${minutesDegrees}deg`;
-
-
-    const hours = now.getHours();
-    const hoursDegrees = ((hours / 12) * 360) + 90;
-    hourHand.style.transform = `rotate(${hoursDegrees}deg`;
-    console.log(hours)
-
-}
-  setInterval(setDate, 1000 );
+  const setDate = () => {
+    const secondToDegrees  = ((seconds/60) * 360) + 90 ;
+    const minutesToDegrees = ((minutes/60) * 360) + 90 ;
+    const hoursToDegrees   = ((hours/12) * 360) + 90 ;
+    secondHand.style = `transform: rotate(${secondToDegrees}deg)`
+    minuteHand.style = `transform: rotate(${minutesToDegrees}deg)`
+    hourHand.style = `transform: rotate(${hoursToDegrees}deg)`
+    // ----> incrementation acording to seconds, so that the other two hands are always moving real slow like a real clock
+    seconds = seconds + 1 ;
+    minutes = minutes + (1/60) ;
+    hours   = hours + (1/3600)
+    // <--------
+  };
+  setInterval(setDate, 1000);
   </script>
 </body>
 </html>
