@@ -17,9 +17,9 @@
   html {
     box-sizing: border-box;
   }
-  
-  *, *:before, *:after { 
-    box-sizing: inherit; 
+
+  *, *:before, *:after {
+    box-sizing: inherit;
   }
 
   div {
@@ -43,6 +43,31 @@
 <button></button>
 <script>
 
+  const divs = document.querySelectorAll('div');
+  const button = document.querySelector('button');
+
+  function logText(e) {
+    console.log(this.classList.value);
+    // e.stopPropagation();
+  }
+
+  divs.forEach(div => div.addEventListener('click', logText, {
+    capture: false,
+    once: true
+  }));
+
+  button.addEventListener('click', () => {
+    console.log('Click!!!');
+  }, {
+    once: true
+  });
+
 </script>
 </body>
 </html>
+
+
+
+
+
+
